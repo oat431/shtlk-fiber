@@ -1,6 +1,7 @@
 package routes
 
 import (
+	"oat431/shtlk-fiber/controller"
 	"os"
 
 	"github.com/gofiber/fiber/v3"
@@ -21,6 +22,7 @@ func StartingApplication() {
 	health := v1.Group("/health-check")
 
 	health.Get("/health", healthcheck.New())
+	health.Get("/info", controller.GetInfo)
 
 	err := app.Listen(":" + port)
 	if err != nil {
