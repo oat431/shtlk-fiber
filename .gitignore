@@ -1,0 +1,41 @@
+# --- Go Binaries & Build Outputs ---
+/bin/
+/dist/
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+
+# --- Dependency Directories ---
+vendor/
+
+# --- Environment Variables ---
+.env
+.env.local
+.env.development
+.env.test
+.env.production
+# แต่เราจะเก็บไฟล์ตัวอย่างไว้เพื่อให้คนอื่นรู้ว่าต้องใส่อะไรบ้าง
+!.env.example
+
+# --- IntelliJ IDEA ---
+.idea/
+*.iws
+*.iml
+*.ipr
+out/
+
+# --- VS Code ---
+.vscode/
+
+# --- OS Specific Files ---
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# --- Logs ---
+*.log
+logs/
