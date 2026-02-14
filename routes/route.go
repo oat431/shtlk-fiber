@@ -5,6 +5,7 @@ import (
 
 	"github.com/gofiber/fiber/v3"
 	"github.com/gofiber/fiber/v3/log"
+	"github.com/gofiber/fiber/v3/middleware/healthcheck"
 )
 
 func init() {
@@ -14,6 +15,12 @@ func init() {
 func StartingApplication() {
 	app := fiber.New()
 	port := os.Getenv("PORT")
+
+	api := app.Group("/api")
+	v1 := api.Group("/v1")
+	health := v1.Group("/health-check")
+
+	health.Get("/health", healthcheck.New())
 
 	err := app.Listen(":" + port)
 	if err != nil {
