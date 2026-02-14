@@ -17,6 +17,15 @@ func StartingApplication() {
 	app := fiber.New()
 	port := os.Getenv("PORT")
 
+	app.Use(func(c fiber.Ctx) error {
+		log.Info("", c.Method(), " ", c.Path())
+		err := c.Next()
+		if err != nil {
+			log.Fatal("Error occurred while processing request: ", err)
+		}
+		return err
+	})
+
 	api := app.Group("/api")
 	v1 := api.Group("/v1")
 	health := v1.Group("/health-check")

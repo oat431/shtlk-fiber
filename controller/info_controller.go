@@ -20,5 +20,5 @@ func GetInfo(c fiber.Ctx) error {
 		Error:  nil,
 	}
 
-	return c.JSON(res)
+	return c.Status(fiber.StatusOK).JSON(res)
 }
