@@ -7,6 +7,5 @@ import (
 
 func main() {
 	config.LoadEnvConfig()
-	config.StartDatabase()
 	routes.StartingApplication()
 }

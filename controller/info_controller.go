@@ -15,7 +15,7 @@ func GetInfo(c fiber.Ctx) error {
 	}
 
 	res := common.ResponseDTO[response.InfoResponse]{
-		Data:   info,
+		Data:   &info,
 		Status: common.SUCCESS,
 		Error:  nil,
 	}

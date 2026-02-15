@@ -1,7 +1,7 @@
 package common
 
 type ResponseDTOError struct {
-	httpCode  int
-	errorCode string
-	message   string
+	HttpCode  int    `json:"http_code"`
+	ErrorCode string `json:"error_code"`
+	Message   string `json:"message"`
 }

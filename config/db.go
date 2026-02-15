@@ -9,7 +9,7 @@ import (
 	_ "github.com/lib/pq"
 )
 
-func StartDatabase() {
+func StartDatabase() *sqlx.DB {
 	host := os.Getenv("DB_HOST")
 	port := os.Getenv("DB_PORT")
 	user := os.Getenv("DB_USER")
@@ -20,12 +20,12 @@ func StartDatabase() {
 		"host=%s port=%s user=%s password=%s dbname=%s sslmode=disable",
 		host, port, user, password, dbname)
 
-	db, cannotConnect := sqlx.Connect("postgres", pgsqlInfo)
-	if cannotConnect != nil {
-		log.Fatal("cannot connect to database: ", cannotConnect)
+	db, err := sqlx.Connect("postgres", pgsqlInfo)
+	if err != nil {
+		log.Fatal("cannot connect to database: ", err)
 	}
 
-	defer db.Close()
 	log.Info("database connected")
 
+	return db
 }
