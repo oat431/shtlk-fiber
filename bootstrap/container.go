@@ -11,6 +11,7 @@ import (
 
 type AppContainer struct {
 	ShortLinkController *controller.ShortLinkController
+	RedirectController  *controller.RedirectController
 }
 
 func NewAppContainer(db *sqlx.DB) *AppContainer {
@@ -19,9 +20,11 @@ func NewAppContainer(db *sqlx.DB) *AppContainer {
 	shortLinkService := service.NewShortLinkService(shortLinkRepo)
 
 	shortLinkController := controller.NewShortLinkController(shortLinkService)
+	redirectController := controller.NewRedirectController(shortLinkService)
 
 	log.Info("Starting Bootstrap Container...")
 	return &AppContainer{
 		ShortLinkController: shortLinkController,
+		RedirectController:  redirectController,
 	}
 }

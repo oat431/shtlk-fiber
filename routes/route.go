@@ -42,6 +42,7 @@ func StartingApplication() {
 	// Register routes for different modules
 	RegisterHealthRoutes(v1)
 	RegisterShortLinkRoutes(v1, container.ShortLinkController)
+	RegisterRedirectRoutes(app, container.RedirectController)
 
 	// Start the server
 	err := app.Listen(":" + port)
