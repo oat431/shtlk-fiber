@@ -8,6 +8,7 @@ import (
 
 type ShortLinkService interface {
 	GetAllLinks(ctx context.Context) ([]response.ShortLinkDTO, error)
+	GetLinkByCode(ctx context.Context, code string, linkType string) (*response.ShortLinkDTO, error)
 }
 
 type shortLinkService struct {
@@ -34,4 +35,18 @@ func (s shortLinkService) GetAllLinks(ctx context.Context) ([]response.ShortLink
 		shortLinkDTOs = append(shortLinkDTOs, shortLinkDTO)
 	}
 	return shortLinkDTOs, nil
+}
+
+func (s shortLinkService) GetLinkByCode(ctx context.Context, code string, linkType string) (*response.ShortLinkDTO, error) {
+	shortLink, err := s.repo.GetLinkByShortCode(ctx, code, linkType)
+	if err != nil {
+		return nil, err
+	}
+
+	shortLinkDTO := &response.ShortLinkDTO{
+		ShortLink:    shortLink.ShortURL,
+		OriginalLink: shortLink.OriginalURL,
+		LinkType:     string(shortLink.Type),
+	}
+	return shortLinkDTO, nil
 }

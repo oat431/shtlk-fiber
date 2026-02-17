@@ -7,10 +7,5 @@ import (
 )
 
 func RegisterRedirectRoutes(router fiber.Router, controller *controller.RedirectController) {
-	random := router.Group("/r")
-	custom := router.Group("/c")
-
-	random.Get("/:code", controller.ShortLinkRedirect)
-	custom.Get("/:code", controller.ShortLinkRedirect)
-
+	router.Get("/:linkType/:code", controller.ShortLinkRedirect)
 }

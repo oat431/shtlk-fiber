@@ -1,9 +1,12 @@
 package controller
 
 import (
+	"oat431/shtlk-fiber/common"
+	"oat431/shtlk-fiber/payload/response"
 	"oat431/shtlk-fiber/service"
 
 	"github.com/gofiber/fiber/v3"
+	"github.com/gofiber/fiber/v3/log"
 )
 
 type RedirectController struct {
@@ -15,5 +18,33 @@ func NewRedirectController(shortLinkService service.ShortLinkService) *RedirectC
 }
 
 func (s *RedirectController) ShortLinkRedirect(c fiber.Ctx) error {
-	return c.Status(fiber.StatusMovedPermanently).Redirect().To("https://github.com/oat431")
+	code := c.Params("code")
+	linkType := linkTypeToEnum(c.Params("linkType"))
+
+	shortLinkDTO, err := s.GetLinkByCode(c.Context(), code, linkType)
+	if err != nil {
+		res := common.ResponseDTO[response.ShortLinkDTO]{
+			Data:   nil,
+			Status: common.ERROR,
+			Error: &common.ResponseDTOError{
+				HttpCode:  fiber.StatusNotFound,
+				ErrorCode: "SHORT_LINK_NOT_FOUND",
+				Message:   "Short link not found",
+			},
+		}
+		return c.Status(fiber.StatusNotFound).JSON(res)
+	}
+	log.Info("Redirecting to: ", shortLinkDTO.OriginalLink)
+	return c.Status(fiber.StatusMovedPermanently).Redirect().To(shortLinkDTO.OriginalLink)
+}
+
+func linkTypeToEnum(linkType string) string {
+	switch linkType {
+	case "c":
+		return "CUSTOM"
+	case "r":
+		return "RANDOM"
+	default:
+		return "r"
+	}
 }

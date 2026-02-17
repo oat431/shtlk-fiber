@@ -4,11 +4,13 @@ import (
 	"context"
 	"oat431/shtlk-fiber/model"
 
+	"github.com/gofiber/fiber/v3/log"
 	"github.com/jmoiron/sqlx"
 )
 
 type ShortLinkRepository interface {
 	GetAllShortLink(ctx context.Context) ([]model.ShortLink, error)
+	GetLinkByShortCode(ctx context.Context, code string, linkType string) (*model.ShortLink, error)
 }
 
 type shortLinkRepository struct {
@@ -42,4 +44,18 @@ func (s shortLinkRepository) GetAllShortLink(ctx context.Context) ([]model.Short
 	}
 
 	return shortLinks, nil
+}
+
+func (s shortLinkRepository) GetLinkByShortCode(ctx context.Context, code string, linkType string) (*model.ShortLink, error) {
+	query := "SELECT id, url_original, url_short, link_type, created_at FROM tb_short_link WHERE url_short = $1 AND link_type = $2 "
+	row := s.db.QueryRowContext(ctx, query, code, linkType)
+
+	var sl model.ShortLink
+	err := row.Scan(&sl.ID, &sl.OriginalURL, &sl.ShortURL, &sl.Type, &sl.CreatedAt)
+	if err != nil {
+		log.Error("Error scanning row: ", err)
+		return nil, err
+	}
+
+	return &sl, nil
 }
