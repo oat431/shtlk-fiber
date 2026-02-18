@@ -5,12 +5,11 @@ import (
 	"oat431/shtlk-fiber/payload/request"
 	"oat431/shtlk-fiber/payload/response"
 	"oat431/shtlk-fiber/service"
+	"oat431/shtlk-fiber/validate"
 
-	"github.com/go-playground/validator/v10"
 	"github.com/gofiber/fiber/v3"
+	"github.com/gofiber/fiber/v3/log"
 )
-
-var validate = validator.New()
 
 type ShortLinkController struct {
 	service service.ShortLinkService
@@ -42,27 +41,10 @@ func (s *ShortLinkController) GetAllShortLinks(c fiber.Ctx) error {
 
 func (s *ShortLinkController) CreateRandomShortLink(c fiber.Ctx) error {
 	var req request.ShortLinkRequest
-	if err := c.Bind().Body(&req); err != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(common.ResponseDTO[any]{
-			Data:   nil,
-			Status: common.ERROR,
-			Error: &common.ResponseDTOError{
-				HttpCode:  fiber.StatusBadRequest,
-				ErrorCode: "BAD_REQUEST",
-				Message:   "Invalid request body",
-			},
-		})
-	}
-	if err := validate.Struct(req); err != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(common.ResponseDTO[any]{
-			Data:   nil,
-			Status: common.ERROR,
-			Error: &common.ResponseDTOError{
-				HttpCode:  fiber.StatusBadRequest,
-				ErrorCode: "VALIDATION_ERROR",
-				Message:   err.Error(),
-			},
-		})
+	err := validate.ValidateShortLinkRequest(req, c)
+	if err != nil {
+		log.Error("Validation error: ", err)
+		return err
 	}
 
 	shortLinkDTO, err := s.service.CreateRandomShortLink(c.Context(), req.Url)
