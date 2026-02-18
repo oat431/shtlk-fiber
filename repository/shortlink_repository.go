@@ -63,7 +63,7 @@ func (s shortLinkRepository) GetLinkByShortCode(ctx context.Context, code string
 }
 
 func (s shortLinkRepository) CreateShortLink(ctx context.Context, url string, shortUrl string, linkType string) (*model.ShortLink, error) {
-	query := "INSERT INTO tb_short_link (id,url_original, url_short, link_type) VALUES ($1, $2, $3,$4) RETURNING id, url_original, url_short, link_type, created_at"
+	query := "INSERT INTO tb_short_link (id,url_original, url_short, link_type, created_at) VALUES ($1, $2, $3,$4,$5) RETURNING id, url_original, url_short, link_type, created_at"
 	uuid := utils.GenerateUUID()
 	var sl model.ShortLink
 	err := s.db.QueryRowContext(
@@ -73,6 +73,7 @@ func (s shortLinkRepository) CreateShortLink(ctx context.Context, url string, sh
 		url,
 		shortUrl,
 		linkType,
+		utils.GetCurrentTime(),
 	).Scan(&sl.ID, &sl.OriginalURL, &sl.ShortURL, &sl.Type, &sl.CreatedAt)
 	if err != nil {
 		log.Error("Error inserting short link: ", err)

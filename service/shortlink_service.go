@@ -57,10 +57,7 @@ func (s shortLinkService) CreateRandomShortLink(ctx context.Context, originalURL
 	shortName := utils.GenerateName()
 	isUnique := false
 	for !isUnique {
-		existingLink, err := s.repo.GetLinkByShortCode(ctx, shortName, "RANDOM")
-		if err != nil {
-			return nil, err
-		}
+		existingLink, _ := s.repo.GetLinkByShortCode(ctx, shortName, "RANDOM")
 		if existingLink == nil {
 			isUnique = true
 		} else {
