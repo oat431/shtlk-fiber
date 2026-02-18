@@ -55,7 +55,6 @@ func (s shortLinkRepository) GetLinkByShortCode(ctx context.Context, code string
 	var sl model.ShortLink
 	err := row.Scan(&sl.ID, &sl.OriginalURL, &sl.ShortURL, &sl.Type, &sl.CreatedAt)
 	if err != nil {
-		log.Error("Error scanning row: ", err)
 		return nil, err
 	}
 

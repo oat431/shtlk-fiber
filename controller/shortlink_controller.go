@@ -5,10 +5,8 @@ import (
 	"oat431/shtlk-fiber/payload/request"
 	"oat431/shtlk-fiber/payload/response"
 	"oat431/shtlk-fiber/service"
-	"oat431/shtlk-fiber/validate"
 
 	"github.com/gofiber/fiber/v3"
-	"github.com/gofiber/fiber/v3/log"
 )
 
 type ShortLinkController struct {
@@ -40,12 +38,7 @@ func (s *ShortLinkController) GetAllShortLinks(c fiber.Ctx) error {
 }
 
 func (s *ShortLinkController) CreateRandomShortLink(c fiber.Ctx) error {
-	var req request.ShortLinkRequest
-	err := validate.ValidateShortLinkRequest(req, c)
-	if err != nil {
-		log.Error("Validation error: ", err)
-		return err
-	}
+	req := c.Locals("payload").(*request.ShortLinkRequest)
 
 	shortLinkDTO, err := s.service.CreateRandomShortLink(c.Context(), req.Url)
 	var res = common.ResponseDTO[response.ShortLinkDTO]{}

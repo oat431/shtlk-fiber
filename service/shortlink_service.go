@@ -5,6 +5,8 @@ import (
 	"oat431/shtlk-fiber/payload/response"
 	"oat431/shtlk-fiber/repository"
 	"oat431/shtlk-fiber/utils"
+
+	"github.com/gofiber/fiber/v3/log"
 )
 
 type ShortLinkService interface {
@@ -42,6 +44,7 @@ func (s shortLinkService) GetAllLinks(ctx context.Context) ([]response.ShortLink
 func (s shortLinkService) GetLinkByCode(ctx context.Context, code string, linkType string) (*response.ShortLinkDTO, error) {
 	shortLink, err := s.repo.GetLinkByShortCode(ctx, code, linkType)
 	if err != nil {
+		log.Error("Error fetching short link by code: ", err)
 		return nil, err
 	}
 

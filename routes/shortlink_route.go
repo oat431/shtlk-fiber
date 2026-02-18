@@ -1,6 +1,9 @@
 package routes
 
 import (
+	"oat431/shtlk-fiber/middleware"
+	"oat431/shtlk-fiber/payload/request"
+
 	"github.com/gofiber/fiber/v3"
 
 	"oat431/shtlk-fiber/controller"
@@ -10,5 +13,8 @@ func RegisterShortLinkRoutes(router fiber.Router, controller *controller.ShortLi
 	route := router.Group("/short-link")
 
 	route.Get("/", controller.GetAllShortLinks)
-	route.Post("/random", controller.CreateRandomShortLink)
+	route.Post("/random",
+		middleware.Validate[request.ShortLinkRequest],
+		controller.CreateRandomShortLink,
+	)
 }
