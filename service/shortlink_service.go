@@ -6,6 +6,7 @@ import (
 	"oat431/shtlk-fiber/repository"
 	"oat431/shtlk-fiber/utils"
 
+	"github.com/gofiber/fiber/v3"
 	"github.com/gofiber/fiber/v3/log"
 )
 
@@ -13,6 +14,7 @@ type ShortLinkService interface {
 	GetAllLinks(ctx context.Context) ([]response.ShortLinkDTO, error)
 	GetLinkByCode(ctx context.Context, code string, linkType string) (*response.ShortLinkDTO, error)
 	CreateRandomShortLink(ctx context.Context, originalURL string) (*response.ShortLinkDTO, error)
+	CreateCustomShortLink(ctx context.Context, originalURL string, customCode string) (*response.ShortLinkDTO, error)
 }
 
 type shortLinkService struct {
@@ -69,6 +71,26 @@ func (s shortLinkService) CreateRandomShortLink(ctx context.Context, originalURL
 	}
 
 	shortLink, err := s.repo.CreateShortLink(ctx, originalURL, shortName, "RANDOM")
+	if err != nil {
+		return nil, err
+	}
+
+	shortLinkDTO := &response.ShortLinkDTO{
+		ShortLink:    shortLink.ShortURL,
+		OriginalLink: shortLink.OriginalURL,
+		LinkType:     string(shortLink.Type),
+	}
+	return shortLinkDTO, nil
+}
+
+func (s shortLinkService) CreateCustomShortLink(ctx context.Context, originalURL string, customCode string) (*response.ShortLinkDTO, error) {
+	shortName := customCode
+	existLink, err := s.repo.GetLinkByShortCode(ctx, shortName, "CUSTOM")
+	if existLink != nil {
+		return nil, fiber.NewError(fiber.StatusConflict, "Custom short link already exists")
+	}
+
+	shortLink, err := s.repo.CreateShortLink(ctx, originalURL, shortName, "CUSTOM")
 	if err != nil {
 		return nil, err
 	}

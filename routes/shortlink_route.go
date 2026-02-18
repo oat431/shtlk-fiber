@@ -17,4 +17,8 @@ func RegisterShortLinkRoutes(router fiber.Router, controller *controller.ShortLi
 		middleware.Validate[request.ShortLinkRequest],
 		controller.CreateRandomShortLink,
 	)
+	route.Post("/custom",
+		middleware.Validate[request.ShortLinkRequest],
+		controller.CreateCustomShortLink,
+	)
 }

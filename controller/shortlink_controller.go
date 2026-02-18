@@ -58,3 +58,24 @@ func (s *ShortLinkController) CreateRandomShortLink(c fiber.Ctx) error {
 
 	return c.Status(fiber.StatusCreated).JSON(res)
 }
+
+func (s *ShortLinkController) CreateCustomShortLink(c fiber.Ctx) error {
+	req := c.Locals("payload").(*request.ShortLinkRequest)
+	shortLinkDTO, err := s.service.CreateCustomShortLink(c.Context(), req.Url, req.CustomName)
+	var res = common.ResponseDTO[response.ShortLinkDTO]{}
+	if err != nil {
+		res.Data = nil
+		res.Status = common.ERROR
+		res.Error = &common.ResponseDTOError{
+			HttpCode:  fiber.StatusConflict,
+			ErrorCode: "SHORT_LINK_ALREADY_EXISTS",
+			Message:   "Custom short link already exists",
+		}
+		return c.Status(fiber.StatusConflict).JSON(res)
+	}
+	res.Data = shortLinkDTO
+	res.Status = common.SUCCESS
+	res.Error = nil
+
+	return c.Status(fiber.StatusCreated).JSON(res)
+}
