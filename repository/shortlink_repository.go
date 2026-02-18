@@ -3,6 +3,7 @@ package repository
 import (
 	"context"
 	"oat431/shtlk-fiber/model"
+	"oat431/shtlk-fiber/utils"
 
 	"github.com/gofiber/fiber/v3/log"
 	"github.com/jmoiron/sqlx"
@@ -11,6 +12,7 @@ import (
 type ShortLinkRepository interface {
 	GetAllShortLink(ctx context.Context) ([]model.ShortLink, error)
 	GetLinkByShortCode(ctx context.Context, code string, linkType string) (*model.ShortLink, error)
+	CreateShortLink(ctx context.Context, url string, shortUrl string, linkType string) (*model.ShortLink, error)
 }
 
 type shortLinkRepository struct {
@@ -54,6 +56,26 @@ func (s shortLinkRepository) GetLinkByShortCode(ctx context.Context, code string
 	err := row.Scan(&sl.ID, &sl.OriginalURL, &sl.ShortURL, &sl.Type, &sl.CreatedAt)
 	if err != nil {
 		log.Error("Error scanning row: ", err)
+		return nil, err
+	}
+
+	return &sl, nil
+}
+
+func (s shortLinkRepository) CreateShortLink(ctx context.Context, url string, shortUrl string, linkType string) (*model.ShortLink, error) {
+	query := "INSERT INTO tb_short_link (id,url_original, url_short, link_type) VALUES ($1, $2, $3,$4) RETURNING id, url_original, url_short, link_type, created_at"
+	uuid := utils.GenerateUUID()
+	var sl model.ShortLink
+	err := s.db.QueryRowContext(
+		ctx,
+		query,
+		uuid,
+		url,
+		shortUrl,
+		linkType,
+	).Scan(&sl.ID, &sl.OriginalURL, &sl.ShortURL, &sl.Type, &sl.CreatedAt)
+	if err != nil {
+		log.Error("Error inserting short link: ", err)
 		return nil, err
 	}
 

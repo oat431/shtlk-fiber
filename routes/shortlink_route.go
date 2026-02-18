@@ -10,4 +10,5 @@ func RegisterShortLinkRoutes(router fiber.Router, controller *controller.ShortLi
 	route := router.Group("/short-link")
 
 	route.Get("/", controller.GetAllShortLinks)
+	route.Post("/random", controller.CreateRandomShortLink)
 }
