@@ -1,12 +1,12 @@
 package routes
 
 import (
-	"oat431/shtlk-fiber/middleware"
-	"oat431/shtlk-fiber/payload/request"
+	"oat431/shtlk-fiber/internal/dto/request"
+	"oat431/shtlk-fiber/internal/middleware"
 
 	"github.com/gofiber/fiber/v3"
 
-	"oat431/shtlk-fiber/controller"
+	"oat431/shtlk-fiber/internal/controller"
 )
 
 func RegisterShortLinkRoutes(router fiber.Router, controller *controller.ShortLinkController) {

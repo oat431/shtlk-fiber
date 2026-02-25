@@ -2,9 +2,9 @@ package service
 
 import (
 	"context"
-	"oat431/shtlk-fiber/payload/response"
-	"oat431/shtlk-fiber/repository"
-	"oat431/shtlk-fiber/utils"
+	"oat431/shtlk-fiber/internal/dto/response"
+	"oat431/shtlk-fiber/internal/repository"
+	"oat431/shtlk-fiber/pkg/utils"
 
 	"github.com/gofiber/fiber/v3"
 	"github.com/gofiber/fiber/v3/log"

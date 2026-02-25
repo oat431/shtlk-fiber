@@ -1,9 +1,9 @@
 package controller
 
 import (
-	"oat431/shtlk-fiber/common"
-	"oat431/shtlk-fiber/payload/response"
-	"oat431/shtlk-fiber/service"
+	"oat431/shtlk-fiber/internal/dto/response"
+	"oat431/shtlk-fiber/internal/service"
+	"oat431/shtlk-fiber/pkg/common"
 
 	"github.com/gofiber/fiber/v3"
 	"github.com/gofiber/fiber/v3/log"

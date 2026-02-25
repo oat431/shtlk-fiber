@@ -2,8 +2,8 @@ package repository
 
 import (
 	"context"
-	"oat431/shtlk-fiber/model"
-	"oat431/shtlk-fiber/utils"
+	"oat431/shtlk-fiber/internal/model"
+	"oat431/shtlk-fiber/pkg/utils"
 
 	"github.com/gofiber/fiber/v3/log"
 	"github.com/jmoiron/sqlx"

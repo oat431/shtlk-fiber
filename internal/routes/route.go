@@ -1,9 +1,7 @@
 package routes
 
 import (
-	"oat431/shtlk-fiber/bootstrap"
-	"oat431/shtlk-fiber/config"
-	"os"
+	"oat431/shtlk-fiber/internal/bootstrap"
 
 	"github.com/gofiber/fiber/v3"
 	"github.com/gofiber/fiber/v3/log"
@@ -13,18 +11,7 @@ func init() {
 	log.Info("Initializing routes...")
 }
 
-func StartingApplication() {
-	// Initialize database connection
-	db := config.StartDatabase()
-	defer db.Close()
-
-	// Initialize application container with dependencies
-	container := bootstrap.NewAppContainer(db)
-
-	// Create Fiber app
-	app := fiber.New()
-	port := os.Getenv("PORT")
-
+func SetupRoutes(app *fiber.App, container *bootstrap.AppContainer) {
 	// Middleware to log incoming requests
 	app.Use(func(c fiber.Ctx) error {
 		log.Info("", c.Method(), " ", c.Path())
@@ -43,10 +30,4 @@ func StartingApplication() {
 	RegisterHealthRoutes(v1)
 	RegisterShortLinkRoutes(v1, container.ShortLinkController)
 	RegisterRedirectRoutes(app, container.RedirectController)
-
-	// Start the server
-	err := app.Listen(":" + port)
-	if err != nil {
-		log.Fatal("port 8000 is already in use")
-	}
 }

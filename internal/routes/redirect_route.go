@@ -1,7 +1,7 @@
 package routes
 
 import (
-	"oat431/shtlk-fiber/controller"
+	"oat431/shtlk-fiber/internal/controller"
 
 	"github.com/gofiber/fiber/v3"
 )

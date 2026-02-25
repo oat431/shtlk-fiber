@@ -1,9 +1,9 @@
 package bootstrap
 
 import (
-	"oat431/shtlk-fiber/controller"
-	"oat431/shtlk-fiber/repository"
-	"oat431/shtlk-fiber/service"
+	"oat431/shtlk-fiber/internal/controller"
+	"oat431/shtlk-fiber/internal/repository"
+	"oat431/shtlk-fiber/internal/service"
 
 	"github.com/gofiber/fiber/v3/log"
 	"github.com/jmoiron/sqlx"

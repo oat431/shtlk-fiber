@@ -2,7 +2,7 @@ package middleware
 
 import (
 	"fmt"
-	"oat431/shtlk-fiber/common"
+	"oat431/shtlk-fiber/pkg/common"
 	"strings"
 
 	"github.com/go-playground/validator/v10"
