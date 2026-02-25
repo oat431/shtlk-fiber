@@ -13,21 +13,15 @@ import (
 func main() {
 	config.LoadEnvConfig()
 
-	// Initialize database connection
 	db := config.StartDatabase()
 	defer db.Close()
 
-	// Initialize application container with dependencies
 	container := bootstrap.NewAppContainer(db)
 
-	// Create Fiber app
 	app := fiber.New()
-
-	// Setup Routes
 	routes.SetupRoutes(app, container)
 
 	port := os.Getenv("PORT")
-	// Start the server
 	err := app.Listen(":" + port)
 	if err != nil {
 		log.Fatal("port 8000 is already in use")
