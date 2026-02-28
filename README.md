@@ -6,3 +6,5 @@ there 2 type of url in this app
 - r as a random shorten link
 
 limit the short link name to 5 letter
+
+- feature for simple jwt login
